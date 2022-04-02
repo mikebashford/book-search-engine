@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {
   Jumbotron,
   Container,
@@ -26,8 +26,8 @@ const SavedBooks = () => {
     }
 
     try {
-      const response = await removeBook(bookId, token);
-      removeBookId(bookId);
+      const { data } = await removeBook({ variables: { bookId } });
+      removeBookId(data);
     } catch (err) {
       console.error(err);
     }

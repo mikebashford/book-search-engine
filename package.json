@@ -13,10 +13,11 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "concurrently": "^5.1.0",
-    "apollo-server-express": "^2.15.0"
+    "apollo-server-express": "^2.15.0",
+    "concurrently": "^5.1.0"
   },
   "dependencies": {
+    "@apollo/client": "^3.5.10",
     "apollo-server-express": "^2.15.0",
     "node": "^16.13.2"
   }
