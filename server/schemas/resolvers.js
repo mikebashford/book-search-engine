@@ -7,10 +7,7 @@ const resolvers = {
     user: async (parent, args, context) => {
       if (context.user) {
         const foundUser = await User.findOne({
-          $or: [
-            { _id: user ? user._id : params.id },
-            { username: params.username },
-          ],
+          _id: context.user._id,
         });
 
         return foundUser;
@@ -24,10 +21,8 @@ const resolvers = {
       const token = signToken(user);
       return { token, user };
     },
-    login: async ({ body }, res) => {
-      const user = await User.findOne({
-        $or: [{ username: body.username }, { email: body.email }],
-      });
+    login: async (parent, { email, password }) => {
+      const user = await User.findOne({ email });
       if (!user) {
         throw new AuthenticationError("Incorrect credentials");
       }
@@ -43,20 +38,21 @@ const resolvers = {
     saveBook: async (parent, args, context) => {
       if (context.user) {
         const updatedUser = await User.findOneAndUpdate(
-          { _id: user._id },
-          { $addToSet: { savedBooks: body } },
-          { new: true, runValidators: true }
+          { _id: User._id },
+          { $push: { savedBooks: args } },
+          { new: true }
         );
-        return res.json(updatedUser);
+        return updatedUser;
       }
     },
     deleteBook: async (parent, args, context) => {
       if (context.user) {
         const updatedUser = await User.findOneAndUpdate(
-          { _id: user._id },
-          { $pull: { savedBooks: { bookId: params.bookId } } },
+          { _id: User._id },
+          { $pull: { savedBooks: { bookId: args } } },
           { new: true }
         );
+        return updatedUser;
       }
     },
   },
