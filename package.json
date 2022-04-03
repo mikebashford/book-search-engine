@@ -12,7 +12,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
+  "devDependencies": {
     "concurrently": "^7.1.0",
     "graphql": "^16.3.0",
     "node": "^16.13.2"
