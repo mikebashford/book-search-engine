@@ -8,7 +8,9 @@ const resolvers = {
       if (context.user) {
         const foundUser = await User.findOne({
           _id: context.user._id,
-        });
+        })
+          .select("-__v -password")
+          .populate("books");
         return foundUser;
       }
       throw new AuthenticationError("Not logged in");
@@ -38,7 +40,7 @@ const resolvers = {
       if (context.user) {
         const updatedUser = await User.findOneAndUpdate(
           { _id: context.user._id },
-          { $push: { savedBooks: args } },
+          { $addToSet: { savedBooks: args } },
           { new: true }
         );
         return updatedUser;
@@ -49,7 +51,7 @@ const resolvers = {
       if (context.user) {
         const updatedUser = await User.findOneAndUpdate(
           { _id: context.user._id },
-          { $pull: { savedBooks: args } },
+          { $pull: { savedBooks: { bookId: args.bookId } } },
           { new: true }
         );
         return updatedUser;
